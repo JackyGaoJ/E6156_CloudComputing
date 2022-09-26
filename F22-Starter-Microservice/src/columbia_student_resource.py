@@ -1,5 +1,7 @@
 import pymysql
 
+import os
+
 
 class ColumbiaStudentResource:
 
@@ -8,12 +10,13 @@ class ColumbiaStudentResource:
 
     @staticmethod
     def _get_connection():
-        DBUSER = 'root'
-        DBPASSWORD = 'qq1304637796'
+        DBUSER = os.environ.get('DBUSER')
+        DBPASSWORD = os.environ.get('DBPASSWORD')
+        DBHOST = os.environ.get('HOST')
         conn = pymysql.connect(
             user=DBUSER,
             password=DBPASSWORD,
-            host="localhost",
+            host=DBHOST,
             cursorclass=pymysql.cursors.DictCursor,
             autocommit=True
         )
@@ -22,7 +25,7 @@ class ColumbiaStudentResource:
     @staticmethod
     def get_by_key(key):
 
-        sql = "SELECT * FROM aa_w4111_f22.columbia_student where uni=%s";
+        sql = "SELECT * FROM f22_databases.columbia_students where guid=%s";
         conn = ColumbiaStudentResource._get_connection()
         cur = conn.cursor()
         res = cur.execute(sql, args=key)
